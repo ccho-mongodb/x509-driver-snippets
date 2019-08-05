@@ -1,0 +1,7 @@
+
+
+last attempt:
+Servers:
+Addr: localmongo1:27017, Type: Unknown, State: Connected, Average RTT: 0, Last error: x509: certificate signed by unknown authority
+exit status 1
+
