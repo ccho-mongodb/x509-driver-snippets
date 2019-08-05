@@ -1,0 +1,2 @@
+2019-08-05T17:43:05.227-0400 I NETWORK  [conn1247] Error receiving request from client: SSLHandshakeFailed: SSL peer certificate validation failed: no SSL certificate provided by peer: No error.; connection rejected. Ending connection from 127.0.0.1:64801 (connection id: 1247)
+
