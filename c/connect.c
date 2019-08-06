@@ -21,8 +21,8 @@ main (int argc, char *argv[])
 
    memcpy (&ssl_opts, ssl_default, sizeof ssl_opts);
 
-   ssl_opts.pem_file = "/Users/ccho/dev/drivers/certs/test-client.pem";
-   ssl_opts.ca_file = "/Users/ccho/dev/drivers/certs/test-ca.pem";
+   ssl_opts.pem_file = "<path>/certs/test-client.pem";
+   ssl_opts.ca_file = "<path>/certs/test-ca.pem";
    ssl_opts.weak_cert_validation = false;
    ssl_opts.allow_invalid_hostname = false;
 
