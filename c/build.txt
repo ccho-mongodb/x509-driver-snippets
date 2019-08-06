@@ -1,1 +1,21 @@
 gcc -o connect connect.c -I/usr/local/include/libbson-1.0 -I/usr/local/include/libmongoc-1.0 -lmongoc-1.0 -lbson-1.0
+
+
+ran into some issues with cmake (could not figure it out), so installed driver using brew. v1.14.0
+$ cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF ..
+CMake Error at tools/CMakeLists.txt:1 (set_dist_list):
+  Unknown CMake command "set_dist_list".
+
+
+CMake Warning (dev) in CMakeLists.txt:
+  No cmake_minimum_required command is present.  A line of code such as
+
+    cmake_minimum_required(VERSION 3.14)
+
+  should be added at the top of the file.  The version specified may be lower
+  if you wish to support older CMake versions for this project.  For more
+  information run "cmake --help-policy CMP0000".
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring incomplete, errors occurred!
+
