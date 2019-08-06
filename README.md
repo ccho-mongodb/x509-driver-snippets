@@ -1,7 +1,7 @@
 # x509-driver-snippets
 Connection code snippets for all mongodb drivers using x.509 authentication
 
-###Task description:
+### Task description:
 
 * Driver connection snippets should be single-sourced for both Driver landing pages and connection snippets in the Atlas docs. * Connection snippets should include how to connect to Atlas with both password authentication and x.509. The x.509 snippets will be shared with the Atlas team to update their UI.
 
