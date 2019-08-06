@@ -1,0 +1,41 @@
+Setup for this is slightly tricky since a keystore and truststore are required for the client.
+A keystore contains private keys, certificates, and corresponding public keys
+A truststore contains certificates from the parties that you expect to communicate with, or from CAs
+
+These are stored in system properties:
+javax.net.ssl.trustStore
+javax.net.ssl.trustStorePassword
+javax.net.ssl.keyStore
+javax.net.ssl.keyStorePassword
+
+
+Also, the key setup described in the mongodb security docs (https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate) uses an intermediate certificate.
+It is not immediately clear that when generating the certificate to be used in the keystore that the client and intermediate certificates need to be concatenated before generating the pkcs12 file (pfx).
+
+After following the mongodb security docs, here are instructions on generating the keystore and truststore and required data (although some data might be extraneous).
+
+Keystore:
+
+1) Bundle the client and intermediate authority ceritifcates
+$ cat mongodb-test-client.crt mongodb-test-ia.crt > client-bundle.crt
+
+2)Encrypt with pkcs12 to generate the pfx file
+$ openssl pkcs12 -export -out client-certificate.pfx -inkey mongodb-test-client.key -in client-bundle.crt
+specify a password
+
+Truststore
+
+1) Add server pem to the truststore file
+
+$ keytool -import -alias server-cert -file test-server1.pem -keystore client.truststore
+specify a password
+
+2) Add client pem to the truststore file
+$ keytool -import -alias client-cert -file test-client.pem -keystore client.truststore
+specify a password
+
+The rest of the setup can be taken from the aforementioned mongodb security docs
+
+
+
+
