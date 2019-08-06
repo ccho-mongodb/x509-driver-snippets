@@ -1,0 +1,1 @@
+c++ --std=c++11 <input>.cpp $(pkg-config --cflags --libs libmongocxx)

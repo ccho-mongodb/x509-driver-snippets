@@ -14,14 +14,13 @@ int main(int, char**) {
   mongocxx::instance inst{};
 
   mongocxx::options::ssl ssl_opts{};
-  ssl_opts.ca_file("/Users/ccho/dev/x509-driver-snippets/certs/test-ca.pem");
-  ssl_opts.pem_file("/Users/ccho/dev/x509-driver-snippets/certs/test-client.pem");
+  ssl_opts.ca_file("<path>/certs/test-ca.pem");
+  ssl_opts.pem_file("<path>/certs/test-client.pem");
 
   mongocxx::options::client client_opts{};
   client_opts.ssl_opts(ssl_opts);
 
   mongocxx::uri uri("mongodb://CN%3DChris%2COU%3DTestClientCertificateOrgUnit%2CO%3DEducationClientCertificate%2CL%3DTestClientCertificateLocality%2CST%3DTestClientCertificateState%2CC%3DUS@localmongo1/?authMechanism=MONGODB-X509&ssl=true");
-  //mongocxx::uri uri("mongodb://localmongo1:27017/?authMechanism=MONGODB-X509&ssl=true");
 
   auto client = mongocxx::client{uri, client_opts};
   bsoncxx::builder::stream::document document{};
