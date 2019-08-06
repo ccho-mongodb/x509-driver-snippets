@@ -3,8 +3,9 @@ Connection code snippets for all mongodb drivers using x.509 authentication
 
 ###Task description:
 
-Driver connection snippets should be single-sourced for both Driver landing pages and connection snippets in the Atlas docs. Connection snippets should include how to connect to Atlas with both password authentication and x.509. The x.509 snippets will be shared with the Atlas team to update their UI.
-Details:
+* Driver connection snippets should be single-sourced for both Driver landing pages and connection snippets in the Atlas docs. * Connection snippets should include how to connect to Atlas with both password authentication and x.509. The x.509 snippets will be shared with the Atlas team to update their UI.
+
+#### Details:
 *  Create new shared connection snippets file
 *  All drivers have example to connect to Atlas with password
 *  All drivers have example to connect to Atlas with x.509
@@ -15,19 +16,20 @@ External Reviewers: Jonathan DeStefano and Driver teams.
 
 
 ### Setup local hostname
-Create hostnames in `/etc/hosts`
+Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
 
 ### Certificate creation:
 
-https://docs.mongodb.com/manual/appendix/security/appendixA-openssl-ca/ (create a certificate authority certificate)
+* [create a certificate authority certificate](https://docs.mongodb.com/manual/appendix/security/appendixA-openssl-ca/)
 
+* [create openssl server certificate](https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate)
 
-https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate (create openssl server certificate)
+* [create openssl client certificate](https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate)
 
-https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate (create openssl client certificate)
-
-#### Start server
+#### Start mongo server
+```
 mongod -dbpath /Users/ccho/dev/drivers/test_db_data -logpath <path>/mongod.log --sslMode requireSSL --clusterAuthMode=x509 --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem -fork
+```
 
 #### Create an admin user
 https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/
@@ -53,6 +55,7 @@ mongo --ssl --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.p
 
 
 ### On building keystore and truststore
+Required for specific drivers.
 
 #### Bundle the client and intermediate authority certs
 ```
