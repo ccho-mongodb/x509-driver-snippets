@@ -6,9 +6,6 @@ const cert = fs.readFileSync(__dirname + "/client.pem");
 const key = fs.readFileSync(__dirname + "/client.pem");
 const ca = fs.readFileSync(__dirname + "/ca.pem");
 
-// Customized for sample client keys
-//const userName = "CN=Chris,OU=TestClientCertificateOrgUnit,O=EducationClientCertificate,L=TestClientCertificateLocality,ST=TestClientCertificateState,C=US";
-
 const client = new MongoClient(`mongodb://localmongo1:27017?authMechanism=MONGODB-X509&ssl=true`, {
   useNewUrlParser: true,
   sslCA: ca,
