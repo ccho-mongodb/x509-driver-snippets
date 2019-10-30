@@ -10,6 +10,7 @@ Connection code snippets for all mongodb drivers using x.509 authentication
 *  Create new shared connection snippets file
 *  All drivers have example to connect to Atlas with password
 *  All drivers have example to connect to Atlas with x.509
+
 A/C:
 *  As a user, I can choose a connection snippet that shows how to connect to Atlas using password authentication or x.509 authentication for the driver of my choice.
 
