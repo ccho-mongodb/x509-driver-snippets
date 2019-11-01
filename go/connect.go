@@ -1,11 +1,11 @@
 package main
 
 import (
+    // "crypto/tls"
+	// "crypto/x509"
     "context"
     "fmt"
     "log"
-
-//    "go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -18,7 +18,7 @@ type Trainer struct {
 }
 
 func main() {
-    uri := "mongodb://localmongo1:27017/?authMechanism=MONGODB-X509&ssl=true&sslCertificateAuthorityFile=./ca.pem&sslClientCertificateKeyFile=./client.pem"
+    uri := "mongodb://localmongo1:27017/?authMechanism=MONGODB-X509&ssl=true&sslCertificateAuthorityFile=./ca.pem&sslClientCertificateKeyFile=./mongodb.pem"
     clientOptions := options.Client().ApplyURI(uri)
 
     // Connect to MongoDB
@@ -40,7 +40,7 @@ func main() {
     // Rest of the code will go here
     collection := client.Database("test").Collection("stuff")
 
-    rec := Trainer{"A", 10, "Town"}
+    rec := Trainer{"Ash", 10, "PaletTown"}
     insertResult, err := collection.InsertOne(context.TODO(), rec)
     if err != nil {
         log.Fatal(err)
