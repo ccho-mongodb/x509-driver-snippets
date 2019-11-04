@@ -6,6 +6,7 @@ using System.Net.Security;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core;
 using System;
 using System.Threading.Tasks;
 
@@ -25,39 +26,38 @@ namespace WorkingWithMongoDB
         static void Main(string[] args)
         {
             MainAsync().Wait();
-            Console.ReadLine();
+            Console.WriteLine("done");
         }
 
         static async Task MainAsync()
         {
-            var connectionString = "mongodb://localmongo1:27017?ssl=true&authMechanism=MONGODB-X509&ssl_ca_certs=./test-ca.pem";
-
-            var settings = new MongoClientSettings 
+            var settingObjectOnlySettings = new MongoClientSettings 
             {
-                Credential =  MongoCredential.CreateMongoX509Credential("CN=ChrisChoClient,OU=TestClientCertificateOrgUnit,O=TestClientCertificateOrg,L=TestClientCertificateLocality,ST=TestClientCertificateState,C=US"),
+                Credential =  MongoCredential.CreateMongoX509Credential(null),
                 SslSettings = new SslSettings
                 {
                     ClientCertificates = new List<X509Certificate>()
                     {
-                        new X509Certificate2("./client-certificate.pfx", "mypass")
+                        new X509Certificate2("client-certificate.pfx", "password")
                     },
                 },
-                UseSsl = true
+                UseTls = true,
+                Server = new MongoServerAddress("localmongo1", 27017),
+                AllowInsecureTls = true // for testing using self-signed certs, use this option to skip validation. DO NOT USE THIS OPTION FOR PRODUCTION USES
             };
 
-            var client = new MongoClient(connectionString);
+            var client = new MongoClient(settingObjectOnlySettings);
+            
+            // just doing a quick read + insert to verify the usability of this connection
             var database = client.GetDatabase("test");
-            var collection = database.GetCollection<Entity>("stuff");
+            var collection = database.GetCollection<BsonDocument>("stuff");
+            
+            var allItemsInCollection = await collection.Find(new BsonDocument()).ToListAsync();
+            Console.WriteLine(allItemsInCollection.Count);
 
-            var entity = new Entity { Name = "Tom" };
+            var entity = new BsonDocument {{ "count", allItemsInCollection.Count } };
             collection.InsertOne(entity);
-            var id = entity.Id;
-
-            //var query = Query<Entity>.EQ(e => e.Id, id);
-            //entity = collection.FindOne(query);
-
-            //entity.Name = "Mot";
-            //collection.Save(entity);
+            Console.WriteLine("wrote " + entity + " to DB");
         }
     }
 }
