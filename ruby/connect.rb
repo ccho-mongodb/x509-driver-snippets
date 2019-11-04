@@ -10,8 +10,6 @@ begin
                              ssl_ca_cert: '/Users/ccho/dev/x509-driver-snippets/certs/test-ca.pem',
 
                             )
-                             #ssl_verify: false,
-                             #tlsInsecure: true)
 
   puts Thread.current.backtrace
 
