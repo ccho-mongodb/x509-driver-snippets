@@ -4,6 +4,7 @@ Connection code snippets for MongoDB drivers using x.509 authentication
 # Setup
 
 ## Start mongod without TLS
+https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#start-mongod-processes
 
 ## Add an admin user
 https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/
@@ -21,8 +22,10 @@ db.getSiblingDB("$external").runCommand(
 )
 ```
 
-## Stop mongod
+Record your user values since your client certificate will need to match them.
 
+## Stop mongod
+https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
 
 ## Add a local hostname for the certificate
 Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
@@ -34,19 +37,20 @@ Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
 * [create openssl server certificate](https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate)
 When creating "openssl-test-server.cnf", fill in the DNS.1 and IP.1 settings with the local hostname you set up in /etc/hosts. E.g. "DNS.1 = localmongo1" and "IP.1 = 127.0.0.1".
 Delete DNS.2 and IP.2.
+Make sure all the certificate values match the client certificate / user values except for either the Organization (O) or Organization Unit (OU).
 
 * [create openssl client certificate](https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate)
 
+
 ### Start mongo server with TLS, allowing invalid certificates
 ```
-mongod -dbpath /Users/ccho/dev/drivers/test_db_data -logpath <path>/mongod.log --sslMode requireSSL --clusterAuthMode=x509 --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem -fork
+mongod --dbpath=/Users/chris.cho/dev/mongo_data/6.0.0 --replSet \"myRS\" --tlsMode requireTLS --tlsCertificateKeyFile test-server1.pem  --tlsCAFile test-ca.pem --bind_ip localmongo1 --tlsAllowInvalidCertificates
 ```
-
 
 
 #### Test auth of admin user with mongosh
 ```
-mongo --ssl --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem --host localmongo1  --authenticationMechanism MONGODB-X509 --authenticationDatabase='$external'
+mongosh --tls --host localmongo1 --tlsCertificateKeyFile test-client.pem  --tlsCAFile test-ca.pem --authenticationMechanism MONGODB-X509 --authenticationDatabase='$external' --tlsAllowInvalidCertificates
 ```
 
 ## Additional setup for specific Drivers
