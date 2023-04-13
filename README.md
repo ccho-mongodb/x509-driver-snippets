@@ -1,41 +1,11 @@
 # x509-driver-snippets
-Connection code snippets for all mongodb drivers using x.509 authentication
+Connection code snippets for MongoDB drivers using x.509 authentication
 
-### Task description:
+# Setup
 
-* Driver connection snippets should be single-sourced for both Driver landing pages and connection snippets in the Atlas docs. 
-* Connection snippets should include how to connect to Atlas with both password authentication and x.509. The x.509 snippets will be shared with the Atlas team to update their UI.
+## Start mongod without TLS
 
-#### Details:
-*  Create new shared connection snippets file
-*  All drivers have example to connect to Atlas with password
-*  All drivers have example to connect to Atlas with x.509
-
-A/C:
-*  As a user, I can choose a connection snippet that shows how to connect to Atlas using password authentication or x.509 authentication for the driver of my choice.
-
-External Reviewers: Jonathan DeStefano and Driver teams.
-
-
-### Setup local hostname
-Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
-
-### Certificate creation:
-
-* [create a certificate authority certificate](https://docs.mongodb.com/manual/appendix/security/appendixA-openssl-ca/)
-
-* [create openssl server certificate](https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate)
-When creating "openssl-test-server.cnf", fill in the DNS.1 and IP.1 settings with the local hostname you set up in /etc/hosts. E.g. "DNS.1 = localmongo1" and "IP.1 = 127.0.0.1".
-Delete DNS.2 and IP.2.
-
-* [create openssl client certificate](https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate)
-
-#### Start mongo server
-```
-mongod -dbpath /Users/ccho/dev/drivers/test_db_data -logpath <path>/mongod.log --sslMode requireSSL --clusterAuthMode=x509 --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem -fork
-```
-
-#### Create an admin user
+## Add an admin user
 https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/
 
 ```
@@ -51,11 +21,35 @@ db.getSiblingDB("$external").runCommand(
 )
 ```
 
+## Stop mongod
 
-#### Test auth of admin user
+
+## Add a local hostname for the certificate
+Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
+
+## Create certificates for CA, Server, and Client:
+
+* [create a certificate authority certificate](https://docs.mongodb.com/manual/appendix/security/appendixA-openssl-ca/)
+
+* [create openssl server certificate](https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate)
+When creating "openssl-test-server.cnf", fill in the DNS.1 and IP.1 settings with the local hostname you set up in /etc/hosts. E.g. "DNS.1 = localmongo1" and "IP.1 = 127.0.0.1".
+Delete DNS.2 and IP.2.
+
+* [create openssl client certificate](https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate)
+
+### Start mongo server with TLS, allowing invalid certificates
+```
+mongod -dbpath /Users/ccho/dev/drivers/test_db_data -logpath <path>/mongod.log --sslMode requireSSL --clusterAuthMode=x509 --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem -fork
+```
+
+
+
+#### Test auth of admin user with mongosh
 ```
 mongo --ssl --sslPEMKeyFile <path>/test-server1.pem --sslCAFile <path>/test-ca.pem --host localmongo1  --authenticationMechanism MONGODB-X509 --authenticationDatabase='$external'
 ```
+
+## Additional setup for specific Drivers
 
 
 ### On building keystore and truststore
