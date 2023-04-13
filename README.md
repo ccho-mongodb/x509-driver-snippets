@@ -25,6 +25,8 @@ Create hostnames in `/etc/hosts`. e.g. `127.0.0.1 localmongo1`
 * [create a certificate authority certificate](https://docs.mongodb.com/manual/appendix/security/appendixA-openssl-ca/)
 
 * [create openssl server certificate](https://docs.mongodb.com/manual/appendix/security/appendixB-openssl-server/#appendix-server-certificate)
+When creating "openssl-test-server.cnf", fill in the DNS.1 and IP.1 settings with the local hostname you set up in /etc/hosts. E.g. "DNS.1 = localmongo1" and "IP.1 = 127.0.0.1".
+Delete DNS.2 and IP.2.
 
 * [create openssl client certificate](https://docs.mongodb.com/manual/appendix/security/appendixC-openssl-client/#appendix-client-certificate)
 
